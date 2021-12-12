@@ -9,22 +9,42 @@ document.addEventListener('DOMContentLoaded', (e) => {
     const keyWhiteArr = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'z', 'x'];
     const keyBlackArr = ['2', '3', '5', '6', '7', '9', '0', '-', 'a', 's'];
 
-    function setEventElements(i ,arr ,elem, activeClass){
-        elem.textContent = arr[i];
+    function setKeysEvent(arr, eventUp, eventDown, elem, activeClass){
+        elem.forEach((item, i) => {
+            item.textContent = arr[i];
+            item.id = arr[i];
 
-        document.addEventListener('keydown', (e) => {
-            if(arr[i] === e.key){
-                elem.classList.add(activeClass);
-            }
-        });
-        document.addEventListener('keyup', (e) => {
-            if(arr[i] === e.key){
-                elem.classList.remove(activeClass);
-            }
+            document.addEventListener(eventDown, (e) => {
+                if(arr[i] === e.key){
+                    item.classList.add(activeClass);
+                }
+            });
+            document.addEventListener(eventUp , (e) => {
+                if(arr[i] === e.key){
+                    item.classList.remove(activeClass);
+                }
+            });
         });
     }
 
-    blackKey.forEach((item, i) => setEventElements(i, keyBlackArr, item, 'black-active'));
+    function setMouseEvent(arr, eventUp, eventDown, elem, activeClass){
+        elem.forEach((item, i) => {
+            item.addEventListener(eventDown, (e) => {
+                if(arr[i] === e.target.id){
+                    item.classList.add(activeClass);
+                }
+            });
+            item.addEventListener(eventUp , (e) => {
+                if(arr[i] === e.target.id){
+                    item.classList.remove(activeClass);
+                }
+            });
+        });
+    }
 
-    whiteKey.forEach((item, i) => setEventElements(i, keyWhiteArr, item, 'white-active'));
+    setKeysEvent(keyWhiteArr, 'keyup', 'keydown', whiteKey, 'white-active');
+    setKeysEvent(keyBlackArr, 'keyup', 'keydown', blackKey, 'black-active');
+
+    setMouseEvent(keyWhiteArr, 'mouseup', 'mousedown', whiteKey, 'white-active');
+    setMouseEvent(keyBlackArr, 'mouseup', 'mousedown', blackKey, 'black-active');
 });
